@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add to cart</title>
+  <style>
+    * {
+       font-family: Calibri; font-size: 15px; 
+      }
+    table, th, td {
+      border: solid 1px black;
+      border-collapse: collapse;      
+      text-align: center;
+      margin: 0 auto;
+    }
+    th {
+      font-weight:bold;
+      background-color: black;
+      color: white;  
+      border: solid 1px white;
+    }
+    table, h1 {
+      text-align: center;
+      width:75%;
+    }
+    h1, span{
+      font-size: 30px;
+      width:100%;
+    }
+    #my-table td:last-child {
+      background-color: red;
+    }
+    button:hover{
+      cursor: pointer;
+    }
+    #showData td:last-child {
+      background-color: green;
+    }
+    button {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    }
+  </style>
+</head>
+<body>
+    <h1>Discount Table</h1>
+    <table id="myTable">
+      <thead>
+        <tr>
+            <th>Vendor</th><th>TRADE A</th><th>TRADE B</th><th>TRADE C</th><th>TRADE D</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+            <td>Vendor 1</td><td>12</td><td>12</td><td>N/A</td><td>6</td>
+        </tr>
+        <tr>
+            <td>Vendor 2</td><td>10</td><td>8</td><td>20</td><td>N/A</td>
+        </tr>
+        <tr>
+            <td>Vendor 3</td><td>N/A</td><td>25</td><td>3</td><td>16</td>
+        </tr>
+        <tr>
+            <td>Vendor 4</td><td>9</td><td>N/A</td><td>16</td><td>30</td>
+        </tr>
+        <tr>
+            <td>Vendor 5</td><td>5</td><td>11</td><td>N/A</td><td>30</td>
+        </tr>
+      </tbody>
+    </table><br>
+  <h1>Product Table</h1>
+  <p id='showData'></p>
+
+  <h1>Shopping Cart</h1>
+  <table id="my-table">
+    <tr>
+        <th>S.no</th>
+        <th>Product Name</th>
+        <th>Org. Price</th>
+        <th>Discount %</th>
+        <th>Discounted Price</th>
+        <th>Vendor</th>
+        <th>Remove Cart</th>
+    </tr>
+    <tbody id="carttable"></tbody>
+  </table>
+  <h1> Total Price: Rs.<span id="total"></span></h1>
+
+
+<script>
+
+  // Product details in JSON
+    const productDetails = [
+	{
+        "id": 1,
+        "name": "test product1",
+        "price": 12.50,
+        "tags": ["TRADE A", "ice"],
+		"vendor":"Vendor 5",
+		"discount" : 0,
+        
+    },
+    {
+        "id": 2,
+        "name": "test product2",
+        "price": 42.50,
+        "tags": ["TRADE B", "ice2"],
+		"vendor":"Vendor 4",
+		"discount" : 0
+    },
+    {
+        "id": 3,
+        "name": "test product3",
+        "price": 200.00,
+        "tags": ["TRADE C", "test"],
+		"vendor":"Vendor 3",
+		"discount" : 3
+    },
+    {
+        "id": 4,
+        "name": "test product4",
+        "price": 52.50,
+        "tags": ["TRADE C", "test"],
+		"vendor":"Vendor 2",
+		"discount" : 0
+    },
+    {
+        "id": 5,
+        "name": "test product5",
+        "price": 712.50,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 1",
+		"discount" : 0
+    },
+    {
+        "id": 6,
+        "name": "test product6",
+        "price": 17.00,
+        "tags": ["TRADE A", "test"],
+		"vendor":"Vendor 3",
+		"discount" : 12
+    },
+    {
+        "id": 7,
+        "name": "test product7",
+        "price": 55.00,
+        "tags": ["TRADE A", "test"],
+		"vendor":"Vendor 3",
+		"discount" : 12
+    },
+    {
+        "id": 8,
+        "name": "test product11",
+        "price": 37.00,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 4",
+		"discount" : 12
+    },
+    {
+        "id": 9,
+        "name": "test product9",
+        "price": 82.00,
+        "tags": ["TRADE C", "test"],
+		"vendor":"Vendor 4",
+		"discount" : 34
+    },
+    {
+        "id": 10,
+        "name": "test product10",
+        "price": 52.00,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 2",
+		"discount" : 25
+    },
+    {
+        "id": 11,
+        "name": "test product22",
+        "price": 102.00,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 1",
+		"discount" : 25
+		
+    },
+    {
+        "id": 12,
+        "name": "test product457",
+        "price": 172.50,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 4",
+		"discount" : 0
+    },
+    {
+        "id": 13,
+        "name": "test product15",
+        "price": 100.00,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 5",
+		"discount" : 12
+    },
+    {
+        "id": 14,
+        "name": "test product33",
+        "price": 99.50,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 5",
+		"discount" : 12
+    },
+    {
+        "id": 15,
+        "name": "test product85",
+        "price": 87.50,
+        "tags": ["TRADE A", "test"],
+		"vendor":"Vendor 5",
+		"discount" : 0
+    },
+    {
+        "id": 16,
+        "name": "test product63",
+        "price": 57.00,
+        "tags": ["TRADE A", "test"],
+		"vendor":"Vendor 1",
+		"discount" : 29
+    },
+    {
+        "id": 17,
+        "name": "test product74",
+        "price": 10.00,
+        "tags": ["TRADE C", "test"],
+		"vendor":"Vendor 2",
+		"discount" : 0
+    },
+    {
+        "id": 18,
+        "name": "test product102",
+        "price": 412.50,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 3",
+		"discount" : 56
+    },
+    {
+        "id": 19,
+        "name": "test product358",
+        "price": 112.50,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 4",
+		"discount" : 0
+    },
+    {
+        "id": 20,
+        "name": "test product568",
+        "price": 102.00,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 5",
+		"discount" : 15
+    },
+    {
+        "id": 21,
+        "name": "test product475",
+        "price": 52.00,
+        "tags": ["TRADE A", "test"],
+		"vendor":"Vendor 3",
+		"discount" : 12
+    },
+    {
+        "id": 22,
+        "name": "test product28",
+        "price": 32.00,
+        "tags": ["TRADE C", "test"],
+		"vendor":"Vendor 2",
+		"discount" : 0
+    },
+    {
+        "id": 23,
+        "name": "test product1405",
+        "price": 12.00,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 4",
+		"discount" : 0
+    },
+    {
+        "id": 24,
+        "name": "test product389",
+        "price": 584.50,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 1",
+		"discount" : 0
+    },
+    {
+        "id": 25,
+        "name": "test product555",
+        "price": 67.00,
+        "tags": ["TRADE D", "test"],
+		"vendor":"Vendor 5"
+    },
+    {
+        "id": 26,
+        "name": "test product444",
+        "price": 132.50,
+        "tags": ["TRADE A", "test"],
+		"vendor":"Vendor 5",
+		"discount" : 0
+    },
+    {
+        "id": 27,
+        "name": "test product333",
+        "price": 42.50,
+        "tags": ["TRADE B", "test"],
+		"vendor":"Vendor 2",
+		"discount" : 0
+    }
+]
+
+    // Extract header values from JSON to create table head. 
+    let col = [];
+    for (let i = 0; i < productDetails.length; i++) {
+      for (let key in productDetails[i]) {        
+        if (col.indexOf(key) === -1) {
+          col.push(key);
+        }
+      }
+    }   
+
+    // Create a table.
+    const table = document.createElement("table");
+
+    // Create table header row using the extracted headers above.
+    let tr = table.insertRow(-1);
+
+    for (let i = 0; i < col.length-1; i++) {
+      let th = document.createElement("th");      
+      th.innerHTML = col[i];
+      tr.appendChild(th);
+    }
+    let th = document.createElement("th"); 
+      th.innerHTML = "cart";
+      tr.appendChild(th);
+
+    // add json data to the table as rows.
+    for (let i = 0; i < productDetails.length; i++) {
+      tr = table.insertRow(-1);
+
+      for (let j = 0; j < col.length-1; j++) {
+        let tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = productDetails[i][col[j]];
+      }
+
+    // adding "Add to cart" button at the end of the row.
+     let  tabCel = tr.insertCell(-1);
+        tabCel.innerHTML = "<button onclick='addToCart(this)''>Add to Cart</button>";
+    }
+
+    // Now, add the newly created table with json data, to a container.
+    const divShowData = document.getElementById('showData');
+    divShowData.innerHTML = "";
+    divShowData.appendChild(table);
+
+
+    // addToCart JS
+    function addToCart(button) {        
+       
+    // Get the row that contains the clicked button
+    const row = button.closest('tr');
+
+    // Extract the data from the row
+    const product = row.cells[1].textContent;
+    const price = row.cells[2].textContent;
+    const vendor = row.cells[4].textContent;
+    const tags = row.cells[3].textContent;
+    const taglist = tags.split(",");
+    const trade = taglist[0];
+   
+
+    // to get discount percentage from the discount table using JS
+    function getData(tableId, rowName, columnName) {
+    const table = document.getElementById(tableId);
+    const headers = Array.from(table.querySelectorAll('th'));
+    const columnIndex = headers.findIndex(th => th.textContent === columnName);
+    const rows = Array.from(table.querySelectorAll('tr'));
+    const rowIndex = rows.findIndex(tr => tr.cells[0].textContent === rowName);
+    const cell = rows[rowIndex].cells[columnIndex];
+    const data = cell.textContent;
+    return data;
+  }
+  const discount= getData('myTable', vendor, trade);
+
+  // calculating discounted price using formula
+   let discountPrice= price-(price*(discount/100));  
+   discountPrice= parseFloat(discountPrice.toFixed(2));
+   if (isNaN(discountPrice)){
+    discountPrice=price;
+   }
+
+   // to update serial no. after adding new peoduct
+   const table1 = document.getElementById("my-table");
+   let serialNo=table1.rows.length;
+
+   // adding the product details to tha shopping cart table
+   let carttable = "<tr><td>"+serialNo+"</td><td>" + product + "</td><td>" + price + "</td><td>" + discount +"</td><td>" + discountPrice +"</td><td>" +vendor+"</td><td><button onclick='deleteRow(event)'>Remove</button></td></tr>";
+   document.getElementById("carttable").innerHTML += carttable;
+
+    // to display the total cart price
+    let total = 0;
+    for (let i = 1; i < table1.rows.length; i++) {
+      const price = parseFloat(table1.rows[i].cells[4].textContent);
+      total += price;
+    }
+    total = total.toFixed(2);
+    const totalElement = document.getElementById("total");
+    totalElement.textContent = total;
+
+
+    }
+
+    // JS function to delete the removed product details frm table
+    function deleteRow(event) {
+      const table = document.getElementById("my-table");
+      const button = event.target;
+      const row = button.parentNode.parentNode;
+      table.deleteRow(row.rowIndex);
+      const table1 = document.getElementById("my-table");
+      let total = 0;
+      for (let i = 1; i < table1.rows.length; i++) {
+        const price = parseFloat(table1.rows[i].cells[4].textContent);
+        total += price;
+      }
+      total = total.toFixed(2);
+      const totalElement = document.getElementById("total");
+      totalElement.textContent = total;
+      for (let i = 1; i < table1.rows.length; i++) {
+        table1.rows[i].cells[0].textContent=i;
+      }
+      }
+</script>
+</body>  
+</html>
